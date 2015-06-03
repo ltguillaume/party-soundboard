@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Soundboard</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" type="text/css" href="soundboard.css">
+	<script type="text/javascript">
+		var remoteplay = false;
+		var remoteplaying = false;
+				
+		function play(id, file) {
+			if (remoteplaying) return false;
+			remoteplaying = true;
+			var sound = document.getElementById(id);
+			var playing = document.getElementById(id +'-playing');
+			playing.style.display = 'block';
+			if (remoteplay) {
+				playing.innerHTML='Wordt afgespeeld...';
+				document.createElement("img").src = 'remoteplay.php?file='+ file;
+				sound.className = 'sound selected';
+			} else {
+				playing.innerHTML='Wordt afgespeeld...<audio id="'+ id +'-element" src="uploads/'+ file +'"><a href="uploads/'+ file +'">[Downloaden]</a></audio>';
+				sound.className = 'sound selected';
+				document.getElementById(id +'-element').play();
+			}
+			timeout = setTimeout(function() {
+				remoteplaying = false;
+				playing.style.display = 'none';
+				sound.className = 'sound';
+			}, 4000);
+		}
+		
+		function remoteSwitch() {
+			if (remoteplay) {
+				remoteplay = false;
+				document.getElementById("switch").src = 'images/switch-off.svg';
+			} else {
+				remoteplay = true;
+				document.getElementById("switch").src = 'images/switch-on.svg';
+			}
+		}
+		
+		function upload() {
+			var uploaded = (document.getElementById('upload').style.display == 'block' ? true : false);
+			document.getElementById('contents').style.display = (uploaded ? 'block' : 'none');
+			document.getElementById('upload').style.display = (uploaded ? 'none' : 'block');
+		}
+		
+		function refresh() {
+			location.href = location.href;
+		}
+		
+		function validateX(x, msg) {
+			if (x == null || x == "") {
+				alert(msg);
+				return false;
+			} else return true;
+		}
+		
+		function validate() {
+			if (validateX(document.forms["sbForm"]["sound"].value, "Ge het nog niks geluld!"))
+				if (validateX(document.forms["sbForm"]["desc"].value, "Wa hedde nou gezeet dan?"))
+					if (validateX(document.forms["sbForm"]["user"].value, "Mar wie haj da nou gezeet gehad?"))
+						return true;
+			return false;
+		}
+		</script>
+</head>
+<body onload="if (remoteplay) document.getElementById('switch').src = 'images/switch-on.svg'">
+	<div id="spacer"></div>
+	<div id="contents">{contents}</div>
+	<div id="upload">
+		<form name="sbForm" action="save.php" onsubmit="return validate()" method="post" enctype="multipart/form-data">
+			Prot mar wa:<br>
+			<input type="file" name="sound" onfocus="document.getElementsByName('sound')[0].scrollIntoView()" accept="audio/*" capture="microphone">
+			<br>Wa zinde nou?<br>
+			<input type="text" name="desc" onfocus="document.getElementsByName('desc')[0].scrollIntoView()" x-webkit-speech>
+			<br>En wie het d&egrave; gezeet gehad?<br>
+			<input type="text" name="user" onfocus="document.getElementsByName('user')[0].scrollIntoView()" x-webkit-speech>
+			<br><br>
+			<input type="submit" value="Kiekt us on">
+		</form>
+	</div>
+	<div id="navbar">
+		<div id="title" onclick="location.href='disclaimer.htm'">Soundboard</div>
+		<div id="buttons"><img id="switch" title="Afspelen op boxen" onclick="remoteSwitch()" src="images/switch-off.svg" alt=""><img title="Opnemen" onclick="upload()" src="images/record.svg" alt=""><img title="Vernieuwen" onclick="refresh()" src="images/refresh.svg" alt=""></div>
+	</div>
+</body>
+</html>

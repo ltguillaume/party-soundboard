@@ -1,0 +1,14 @@
+1) Upload this folder to your server
+2) Make sure the following file and folders can be written to by the web server:
+	/queue.lst
+	/sounds/
+	/uploads/
+3) Fill the /users/ folder with .jpg files of people's names that will be on the party (lower case only).
+4) If the images (SVG's) don't work, add a .htaccess file to this folder with the following line:
+	AddType image/svg+xml svg
+
+If you're running this with a web server on the PC that will also do the remote playback:
+1) Rename remoteplay.php.localplayback to remoteplay.php
+2) Copy mpv.exe and mpv.com from http://mpv.io/ to this folder (Windows)
+3) Make sure the following file can be written to by the web server:
+	/playback.log

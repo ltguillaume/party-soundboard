@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Party Flick</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">		
+	<link rel="shortcut icon" href="favicon.ico">
+	<style>
+		* {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			border-size: border-box;
+			-webkit-box-sizing: border-box;
+			border: none;
+		}
+		
+		body {
+			width: 200%;
+			background: #1c1f24;
+		}
+
+		@media screen and (min-width: 850px) {
+			body { width: 100%; }
+		}
+
+		iframe {
+			width: 50%;
+			float: left;
+		}
+
+		#scroll-wrapper {
+			/* overflow-y: auto; fucks up old Android browser */
+			-webkit-overflow-scrolling: touch;
+		}
+	</style>
+</head>
+<body onload="if (window.innerWidth < 850) alert('Schuif naar rechts voor de playlist.');">
+	<!--<div id="scroll-wrapper"><!--For iPhone-->
+	<iframe src="soundboard.php"><a href="soundboard.php">Open Soundboard</a></iframe>
+	<iframe src="http://festify.us"><a href="http://festify.us">Open Playlist</a></iframe>
+	<!--</div>-->
+</body>
+</html>
