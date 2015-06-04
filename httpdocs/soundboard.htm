@@ -16,11 +16,11 @@
 			var playing = document.getElementById(id +'-playing');
 			playing.style.display = 'block';
 			if (remoteplay) {
-				playing.innerHTML='Wordt afgespeeld...';
+				playing.innerHTML='Playing...';
 				document.createElement("img").src = 'remoteplay.php?file='+ file;
 				sound.className = 'sound selected';
 			} else {
-				playing.innerHTML='Wordt afgespeeld...<audio id="'+ id +'-element" src="uploads/'+ file +'"><a href="uploads/'+ file +'">[Downloaden]</a></audio>';
+				playing.innerHTML='Playing...<audio id="'+ id +'-element" src="uploads/'+ file +'"><a href="uploads/'+ file +'">[Download]</a></audio>';
 				sound.className = 'sound selected';
 				document.getElementById(id +'-element').play();
 			}
@@ -59,9 +59,9 @@
 		}
 		
 		function validate() {
-			if (validateX(document.forms["sbForm"]["sound"].value, "Ge het nog niks geluld!"))
-				if (validateX(document.forms["sbForm"]["desc"].value, "Wa hedde nou gezeet dan?"))
-					if (validateX(document.forms["sbForm"]["user"].value, "Mar wie haj da nou gezeet gehad?"))
+			if (validateX(document.forms["sbForm"]["sound"].value, "You didn't say anything!"))
+				if (validateX(document.forms["sbForm"]["desc"].value, "First tell me what you said!"))
+					if (validateX(document.forms["sbForm"]["user"].value, "First tell me who said it!"))
 						return true;
 			return false;
 		}
@@ -72,19 +72,19 @@
 	<div id="contents">{contents}</div>
 	<div id="upload">
 		<form name="sbForm" action="save.php" onsubmit="return validate()" method="post" enctype="multipart/form-data">
-			Prot mar wa:<br>
+			Record your message:<br>
 			<input type="file" name="sound" onfocus="document.getElementsByName('sound')[0].scrollIntoView()" accept="audio/*" capture="microphone">
-			<br>Wa zinde nou?<br>
+			<br>What did you say?<br>
 			<input type="text" name="desc" onfocus="document.getElementsByName('desc')[0].scrollIntoView()" x-webkit-speech>
-			<br>En wie het d&egrave; gezeet gehad?<br>
+			<br>Who was that now?<br>
 			<input type="text" name="user" onfocus="document.getElementsByName('user')[0].scrollIntoView()" x-webkit-speech>
 			<br><br>
-			<input type="submit" value="Kiekt us on">
+			<input type="submit" value="Beam it up">
 		</form>
 	</div>
 	<div id="navbar">
 		<div id="title" onclick="location.href='disclaimer.htm'">Soundboard</div>
-		<div id="buttons"><img id="switch" title="Afspelen op boxen" onclick="remoteSwitch()" src="images/switch-off.svg" alt=""><img title="Opnemen" onclick="upload()" src="images/record.svg" alt=""><img title="Vernieuwen" onclick="refresh()" src="images/refresh.svg" alt=""></div>
+		<div id="buttons"><img id="switch" title="Local/Remote Playback" onclick="remoteSwitch()" src="images/switch-off.svg" alt=""><img title="Record" onclick="upload()" src="images/record.svg" alt=""><img title="Refresh" onclick="refresh()" src="images/refresh.svg" alt=""></div>
 	</div>
 </body>
 </html>

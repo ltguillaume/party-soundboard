@@ -15,12 +15,12 @@ if (is_uploaded_file($_FILES['sound']['tmp_name']))
 		if (file_put_contents('sounds/'. $sound, $sounddesc)) {
 			echo '<script type="text/javascript">location.replace("soundboard.php");</script>';
 		} else {
-			echo "<p style='color:red'>Je hebt 't kapotgemaakt! (file_put_contents)";
+			echo "<p style='color:red'>You broke it! (file_put_contents)";
 		}
 	} else {
-		die("<p style='color:red'>Er is iets misgegaan bij het verplaatsen van ". $_FILES['sound']['name'] ." op de server van ". $source ." naar ". $upload);
+		die("<p style='color:red'>Something went wrong while moving ". $_FILES['sound']['name'] ." on the server from ". $source ." to ". $upload);
 	}
 } else {
-	die("<p style='color:red'>Je hebt geen of vulste groot bestand gekozen of er ging wa mis bij het uploaden ". $_FILES['sound']['name']);
+	die("<p style='color:red'>Your file is too big or Something went wrong while uploading ". $_FILES['sound']['name']);
 }
 ?>
