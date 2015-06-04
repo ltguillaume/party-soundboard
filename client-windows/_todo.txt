@@ -1,4 +1,5 @@
 1) Copy mpv.exe and mpv.com from http://mpv.io/ to this folder
+
 2) In client.ini, change
 		url=http://server-address.com
    to http://server-address.com is the address where the files from /httpdocs are hosted
