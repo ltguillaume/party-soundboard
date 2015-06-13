@@ -15,7 +15,7 @@
 			-webkit-box-sizing: border-box;
 			border: none;
 		}
-		
+	
 		body {
 			width: 200%;
 			background: #1c1f24;
@@ -27,19 +27,32 @@
 
 		iframe {
 			width: 50%;
+			position: relative;
+			left: 50%;
 			float: left;
+			overflow: hidden;
 		}
-
-		#scroll-wrapper {
-			/* overflow-y: auto; fucks up old Android browser */
-			-webkit-overflow-scrolling: touch;
+		
+		#wrapper {
+			float: left;
+			overflow: hidden;
+			/* overflow-y: auto; not OK on Android 2.x browser
+			-webkit-overflow-scrolling: touch; */
+		}
+		
+		#left {
+			position: relative;
+			right: 50%;
+			float: left;
 		}
 	</style>
 </head>
-<body onload="if (window.innerWidth < 850) alert('Schuif naar rechts voor de playlist.');">
-	<!--<div id="scroll-wrapper"><!--For iPhone-->
-	<iframe src="soundboard.php"><a href="soundboard.php">Open Soundboard</a></iframe>
-	<iframe src="http://festify.us"><a href="http://festify.us">Open Playlist</a></iframe>
-	<!--</div>-->
+<body onload="if (window.innerWidth < 850) alert('Drag left for the playlist.');">
+	<div id="wrapper">
+		<div id="left">
+			<iframe id="soundboard" src="soundboard.php"><a href="soundboard.php">Open Soundboard</a></iframe>
+			<iframe id="festify" src="http://festify.us/554a9791757e65242d72f15e"><a href="http://festify.us/554a9791757e65242d72f15e">Open Playlist</a></iframe>
+		</div>
+	</div>
 </body>
 </html>

@@ -73,11 +73,11 @@
 	<div id="upload">
 		<form name="sbForm" action="save.php" onsubmit="return validate()" method="post" enctype="multipart/form-data">
 			Record your message:<br>
-			<input type="file" name="sound" onfocus="document.getElementsByName('sound')[0].scrollIntoView()" accept="audio/*" capture="microphone">
+			<input type="file" name="sound" accept="audio/*" capture="microphone">
 			<br>What did you say?<br>
-			<input type="text" name="desc" onfocus="document.getElementsByName('desc')[0].scrollIntoView()" x-webkit-speech>
+			<input type="text" name="desc" x-webkit-speech>
 			<br>Who was that now?<br>
-			<input type="text" name="user" onfocus="document.getElementsByName('user')[0].scrollIntoView()" x-webkit-speech>
+			<input type="text" name="user" x-webkit-speech>
 			<br><br>
 			<input type="submit" value="Beam it up">
 		</form>
