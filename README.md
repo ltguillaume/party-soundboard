@@ -1,4 +1,6 @@
 # Soundboard
+by ltGuillaume: [Codeberg](https://codeberg.org/ltGuillaume) | [GitHub](https://github.com/ltGuillaume) | [Buy me a beer](https://buymeacoff.ee/ltGuillaume) 🍺
+
 _Soundboard is a simple mobile web-based soundboard system with the ability to record your own sounds and play them on a remote (party) computer._
 
 #### Included
@@ -23,7 +25,7 @@ _For Soundboard+Festify Wrapper (optional):_
 
 #### Screenshots
 ###### Soundboard:  
-![Soundboard](https://cloud.githubusercontent.com/assets/4777345/7990013/40be11c4-0aee-11e5-97a1-93d633beb181.png)  
+![Soundboard](SOUNDBOARD.png)  
 ###### Soundboard+Festify Wrapper:  
-![Soundboard+Festify Wrapper](https://cloud.githubusercontent.com/assets/4777345/7990014/40c1d7b4-0aee-11e5-8624-702d4aa12b93.png)  
+![Soundboard+Festify Wrapper](WRAPPER.png)  
 ###### (on small screens, you can drag left/right between Soundboard and Festify playlist)
