@@ -1,29 +1,24 @@
-1) Upload this folder to your server
+1. Upload this folder to your server
 
-2) Make sure the following file and folders can be written to by the web server:
+2. Make sure the following file and folders can be written to by the web server:
 		/queue.lst
+		/remoteplay
 		/sounds/
 		/uploads/
 
-3) Fill the /users/ folder with .jpg files of people's names that will be on the party (lower case only).
+3. In remove.php, change 'begone' to your preferred password for removing soundbites.
 
-4) If the images (SVG's) don't work, add a .htaccess file to this folder with the following line:
-		AddType image/svg+xml svg
+4. In index.htm, put the URL for your online playlist (e.g. Festify's https://festify.us/party/???) between the quotes after "partyUrl ="
 
-4) In case you want to use soundboard+getfestify.com-wrapper.htm, you can change the following line:
-		<iframe src="http://festify.us"><a href="http://festify.us">Open Playlist</a></iframe>
-   to include your party playlist immediately (without entering the party code),
-   by going to http://festify.us, entering your party code and then copying the URL in the address bar.
-   The resulting line will be something like this:
-		<iframe src="http://festify.us/554a9791757e65242d72f15e"><a href="http://festify.us/554a9791757e65242d72f15e">Open Playlist</a></iframe>
+5. Or rename soundboard.htm to index.htm to skip the landing page completely.
 
 ---
 
 If you're running this with a web server on the PC that will also do the remote playback:
 
-1) Rename remoteplay.php.localplayback to remoteplay.php
+1. Rename remoteplay.php.localplayback to remoteplay.php
 
-2) Copy mpv.exe and mpv.com from http://mpv.io/ to this folder (Windows)
+2. Copy mpv.exe from http://mpv.io to this folder (direct downloads: https://sourceforge.net/projects/mpv-player-windows/files/release/)
 
-3) Make sure the following file can be written to by the web server:
+3. Make sure the following file can be written to by the web server:
 		/playback.log

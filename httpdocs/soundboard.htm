@@ -1,90 +1,38 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html>
 <head>
-	<title>Soundboard</title>
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<link rel="stylesheet" type="text/css" href="soundboard.css">
-	<script type="text/javascript">
-		var remoteplay = false;
-		var remoteplaying = false;
-				
-		function play(id, file) {
-			if (remoteplaying) return false;
-			remoteplaying = true;
-			var sound = document.getElementById(id);
-			var playing = document.getElementById(id +'-playing');
-			playing.style.display = 'block';
-			if (remoteplay) {
-				playing.innerHTML='Playing...';
-				document.createElement("img").src = 'remoteplay.php?file='+ file;
-				sound.className = 'sound selected';
-			} else {
-				playing.innerHTML='Playing...<audio id="'+ id +'-element" src="uploads/'+ file +'"><a href="uploads/'+ file +'">[Download]</a></audio>';
-				sound.className = 'sound selected';
-				document.getElementById(id +'-element').play();
-			}
-			timeout = setTimeout(function() {
-				remoteplaying = false;
-				playing.style.display = 'none';
-				sound.className = 'sound';
-			}, 4000);
-		}
-		
-		function remoteSwitch() {
-			if (remoteplay) {
-				remoteplay = false;
-				document.getElementById("switch").src = 'images/switch-off.svg';
-			} else {
-				remoteplay = true;
-				document.getElementById("switch").src = 'images/switch-on.svg';
-			}
-		}
-		
-		function upload() {
-			var uploaded = (document.getElementById('upload').style.display == 'block' ? true : false);
-			document.getElementById('contents').style.display = (uploaded ? 'block' : 'none');
-			document.getElementById('upload').style.display = (uploaded ? 'none' : 'block');
-		}
-		
-		function refresh() {
-			location.href = location.href;
-		}
-		
-		function validateX(x, msg) {
-			if (x == null || x == "") {
-				alert(msg);
-				return false;
-			} else return true;
-		}
-		
-		function validate() {
-			if (validateX(document.forms["sbForm"]["sound"].value, "You didn't say anything!"))
-				if (validateX(document.forms["sbForm"]["desc"].value, "First tell me what you said!"))
-					if (validateX(document.forms["sbForm"]["user"].value, "First tell me who said it!"))
-						return true;
-			return false;
-		}
-		</script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>Soundboard</title>
 </head>
-<body onload="if (remoteplay) document.getElementById('switch').src = 'images/switch-on.svg'">
-	<div id="spacer"></div>
-	<div id="contents">{contents}</div>
-	<div id="upload">
+<body>
+	<div id="navbar">
+		<div id="title" onclick="refresh()" oncontextmenu="adminSwitch(event)">Soundboard</div>
+		<div id="buttons"><img id="output" class="hide" title="Local/remote Playback" onclick="outputSwitch()" src="images/switch-on.svg" alt=""><img title="Record" onclick="showForm()" src="images/record.svg" alt=""><img title="Refresh" onclick="refresh()" src="images/refresh.svg" alt=""></div>
+		<div id="outputmsg" class="hide"><img src="images/switch-on.svg" height="12px"> Play soundbites over the party speakers</div>
+	</div>
+	<div id="contents">
+		{contents}
+		<div id="disclaimer" onclick="disclaimer()">Disclaimer</div>
+	</div>
+	<div id="form">
+		<h3>Record a message</h3>
+		<center id="record">
+			<button id="recordbtn" onclick="recStartStop()"><h1>⏺️</h1>Record</button>
+			<button id="playbtn" onclick="playStartStop()" disabled><h1>▶️</h1>Play</button>
+		</center>
 		<form name="sbForm" action="save.php" onsubmit="return validate()" method="post" enctype="multipart/form-data">
-			Record your message:<br>
-			<input type="file" name="sound" accept="audio/*" capture="microphone">
-			<br>What did you say?<br>
-			<input type="text" name="desc" x-webkit-speech>
-			<br>Who was that now?<br>
-			<input type="text" name="user" x-webkit-speech>
+			<input id="sound" type="file" name="sound" accept="audio/*" capture="user" hidden>
+			Your name
+			<input type="text" name="user" autocapitalize="sentence">
+			Title
+			<input type="text" name="desc" autocapitalize="sentence"><!--onfocus="document.getElementsByName('desc')[0].scrollIntoView(0)" -->
 			<br><br>
-			<input type="submit" value="Beam it up">
+			<input type="submit" value="Send">
 		</form>
 	</div>
-	<div id="navbar">
-		<div id="title" onclick="location.href='disclaimer.htm'">Soundboard</div>
-		<div id="buttons"><img id="switch" title="Local/Remote Playback" onclick="remoteSwitch()" src="images/switch-off.svg" alt=""><img title="Record" onclick="upload()" src="images/record.svg" alt=""><img title="Refresh" onclick="refresh()" src="images/refresh.svg" alt=""></div>
-	</div>
+	<audio id="localplay">
+	<script src="soundboard.js"></script>
 </body>
 </html>

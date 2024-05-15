@@ -9,11 +9,11 @@ if (is_uploaded_file($_FILES['sound']['tmp_name']))
 	while (file_exists($sound))
 		$sound = time() ."_". preg_replace("([^\w\s\d\.\-_~,;:\[\]\(\]]|[\.]{2,})", '', $_POST['desc']);
 	$upload = $sound .'.'. $path_parts['extension'];
-	
+
 	if (move_uploaded_file($source, 'uploads/'. $upload)) {
 		$sounddesc = $upload ."\r\n". ucfirst($_POST['desc']) ."\r\n". ucfirst($_POST['user']);
 		if (file_put_contents('sounds/'. $sound, $sounddesc)) {
-			echo '<script type="text/javascript">location.replace("soundboard.php");</script>';
+			header('Location: soundboard.php');
 		} else {
 			echo "<p style='color:red'>You broke it! (file_put_contents)";
 		}
@@ -21,6 +21,6 @@ if (is_uploaded_file($_FILES['sound']['tmp_name']))
 		die("<p style='color:red'>Something went wrong while moving ". $_FILES['sound']['name'] ." on the server from ". $source ." to ". $upload);
 	}
 } else {
-	die("<p style='color:red'>Your file is too big or Something went wrong while uploading ". $_FILES['sound']['name']);
+	die("<p style='color:red'>Your file is too big or something went wrong while uploading ". $_FILES['sound']['name']);
 }
 ?>

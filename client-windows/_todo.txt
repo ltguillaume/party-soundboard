@@ -1,5 +1,5 @@
-1) Copy mpv.exe and mpv.com from http://mpv.io/ to this folder
+1. Copy mpv.exe from https://mpv.io to this folder (direct downloads: https://sourceforge.net/projects/mpv-player-windows/files/release/)
 
-2) In client.ini, change
-		url=http://server-address.com
-   to http://server-address.com is the address where the files from /httpdocs are hosted
+2. In client.ini, change
+		url=http://127.0.0.1
+   to the address where the files from /httpdocs are hosted

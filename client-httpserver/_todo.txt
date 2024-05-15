@@ -1,11 +1,11 @@
-1) Copy mpv.exe and mpv.com from http://mpv.io/ to this folder (Windows)
+1. Copy mpv.exe from https://mpv.io to this folder (direct downloads: https://sourceforge.net/projects/mpv-player-windows/files/release/)
 
-2) Run a PHP capable web server on your local PC and set this folder as root
+2. Run a PHP capable web server on your local PC and set this folder as root
 
-3) Open up a port for the web server
+3. Open up a port for the web server
 
-4) In httpdocs/soundboard.htm, change
+4. In httpdocs/soundboard.js, change
 		document.createElement("img").src = 'remoteplay.php?file='+ file;
    to
-		document.createElement("img").src = 'http://server-address.com/remoteplay.php?file='+ file;
-   (where http://server-address.com is the address where the files from /httpdocs are hosted)
+		document.createElement("img").src = 'https://server.address/remoteplay.php?file='+ file;
+   (where https://server.address is the address where the files from /httpdocs are hosted)

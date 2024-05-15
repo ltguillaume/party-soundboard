@@ -1,5 +1,7 @@
 <?php
 $filename = 'queue.lst';
+if (filesize($filename) == 0)
+	exit();
 $queue_handle = fopen($filename, 'r+');
 $locked = flock($queue_handle, LOCK_EX);
 if ($locked) {
