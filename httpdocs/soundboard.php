@@ -4,9 +4,6 @@
 $page = file_get_contents('soundboard.htm');
 $contents;
 
-if (strpos($_SERVER['HTTP_USER_AGENT'], 'it/533', 50))
-	$page = str_replace('css">', 'css"><style>.playing { background-image: url("images/playing.png") }</style>', str_replace('.svg', '.png', $page));
-
 if ($dir = opendir('sounds')) {
 	while (false !== ($sound = readdir($dir)))
 		if ($sound != '.' && $sound != '..')
