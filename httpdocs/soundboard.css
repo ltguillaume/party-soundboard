@@ -57,13 +57,17 @@ button, input {
 	button[disabled] {
 		color: darkgray;
 		filter: grayscale(100%);
+		cursor: default;
 	}
-	button.on { border-color: red }
+	button.recording { border-color: red }
 
 input[type=submit] {
+	margin-left: 4px;
 	background: #494c50;
 	cursor: pointer;
 }
+	#form input[type=button], #form input[type=submit] { width: calc(50% - 2.5px) }
+	#form input[type=submit] { float: right }
 
 #navbar {
 	width: 100%;
@@ -125,12 +129,13 @@ input[type=submit] {
 
 #form { display: none; }
 
-#creditsbtn {
+#bottomnav {
 	margin-top: 60px;
-	text-align:center;
+	text-align: center;
 }
+	#bottomnav > div { margin-top: 20px }
 
-#creditsbtn, .sound {
+#bottomnav > div, .sound {
 	width: 100%;
 /*	box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -185,9 +190,9 @@ input[type=submit] {
 	border-bottom: 4px #53565a solid;
 }
 
-.hide { display: none }
+.hidden { display: none }
 
 input:focus,
-button:hover, #buttons img:hover,
-#creditsbtn:hover, .sound:hover { background: #2b2e33 }
+button:not([disabled]):hover, #buttons img:hover,
+#bottomnav > div:hover, .sound:hover { background: #2b2e33 }
 input[type=submit]:hover { background: #4b4e52 }

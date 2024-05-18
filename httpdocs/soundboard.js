@@ -1,43 +1,84 @@
-const maxRecordTime = 30;
-var remoteplaying = adminmode = false;
-
-if (remoteplay)	outputSwitch(true);
-if (location.href.endsWith('admin')) adminSwitch();
-
+const maxRecordingTime = 30;	// in seconds
+const localplay = document.getElementById('localplay') || null;
+if (localplay) localplay.onended = playingEnded;
+let remoteplay = adminmode = playingid = false;
+if (document.getElementById('output') && document.remoteplay == 1)
+	outputSwitch(true);
+if (location.search == '?admin') adminSwitch();
+if (location.search == '?credits') credits();
+if (/^((?!chrome).)*safari/i.test(navigator.userAgent))
+	adminbtn.classList.remove('hidden');
+function outputSwitch(registered = false) {
+	remoteplay = registered ? true : !remoteplay;
+	if (registered && localStorage.getItem('remoteplay') == 'false')
+		remoteplay = false;
+	output.src = remoteplay ? 'images/switch-on.svg' : 'images/switch-off.svg';
+	if (registered) output.classList.remove('hidden');
+	if (remoteplay)
+		outputmsg.classList.remove('hidden');
+	else
+		outputmsg.classList.add('hidden');
+	if (!registered)
+		localStorage.setItem('remoteplay', remoteplay);
+}
+function adminSwitch(e = false) {
+	if (e) e.preventDefault();
+	if (adminmode)
+		refresh();
+	else if (location.search == '?admin' || confirm('Enter admin mode?')) {
+		adminmode = true;
+		title.textContent = 'Admin🛡';
+	}
+}
+async function credits() {
+	const response = await fetch('credits.htm');
+	contents.innerHTML = await response.text();
+	window.scroll(0,0);
+}
+async function recordSwitch() {
+	const showing = (form.style.display == 'block' ? true : false);
+	if (!showing) await tryInBrowserRecording();
+	contents.style.display = (showing ? 'block' : 'none');
+	form.style.display = (showing ? 'none' : 'block');
+}
+function refresh() {
+	location.href = location.href.replace(location.search, '');
+}
 function play(el) {
-	const id = el.getAttribute('id');
+	if (adminmode) return remove(el);
+	if (playingid) return false;
+	playingid = el.getAttribute('id');
 	const file = el.getAttribute('src');
-	if (remoteplaying || el.removing) return false;
-	remoteplaying = true;
-	const
-		sound = document.getElementById(id),
-		playing = document.getElementById(id +'-playing');
+	const sound = document.getElementById(playingid),
+		playing = document.getElementById(playingid +'-playing');
 	playing.style.display = 'block';
 	playing.innerHTML ='Playing...';
-	sound.className = 'sound selected';
-	if (remoteplay)
-		document.createElement("img").src = 'remoteplay.php?file='+ file;
-	else {
+	sound.classList.add('selected');
+	if (remoteplay) {
+		fetch('remoteplay.php?file='+ file);
+		setTimeout(playingEnded, 5000);
+	} else {
 		localplay.src = 'uploads/'+ file;
 		localplay.play();
 	}
-	setTimeout(function() {
-		remoteplaying = false;
-		playing.style.display = 'none';
-		sound.className = 'sound';
-	}, 5000);
 }
-
-function remove(e, el) {
-	e.preventDefault();
-	if (!adminmode || el.removing) return false;
+function playingEnded() {
+	if (form.style.display == 'block') {
+		stopTimer(playbtn);
+		playbtn.timer = 0;
+	} else {
+		document.getElementById(playingid +'-playing').style.display = 'none';
+		document.getElementById(playingid).classList.remove('selected');
+		playingid = false;
+	}
+};
+function remove(el) {
+	if (el.removing) return false;
 	el.removing = true;
-
 	const delForm = document.createElement('form'),
 		fileInput = document.createElement('input'),
 		passInput = document.createElement('input'),
 		submitBtn = document.createElement('input');
-
 	fileInput.name = 'file';
 	fileInput.value = el.getAttribute('sound');
 	fileInput.hidden = true;
@@ -47,59 +88,24 @@ function remove(e, el) {
 	passInput.placeholder = 'Password...';
 	submitBtn.name = submitBtn.type = 'submit';
 	submitBtn.value = 'Remove';
-
 	delForm.appendChild(fileInput);
 	delForm.appendChild(passInput);
 	delForm.appendChild(submitBtn);
 	el.appendChild(delForm);
 }
-
-function outputSwitch(force = false) {
-	remoteplay = force ? 1 : !remoteplay;
-	output.src = remoteplay ? 'images/switch-on.svg' : 'images/switch-off.svg';
-	if (force) output.className = '';
-	outputmsg.className = remoteplay ? '' : 'hide';
-}
-
-async function showForm() {
-	const showing = (form.style.display == 'block' ? true : false);
-	if (!showing) await tryInBrowserRecording();
-	contents.style.display = (showing ? 'block' : 'none');
-	form.style.display = (showing ? 'none' : 'block');
-}
-
-function refresh() {
-	location.href = location.href;
-}
-
-function adminSwitch(e = false) {
-	if (e) e.preventDefault();
-	adminmode ^= 1;
-	title.textContent = 'Soundboard'+ (adminmode ? ' 🛡' : '');
-}
-
 function validateX(x, msg) {
-	if (x == 0 || x == null || x == "") {
+	if (x == 0 || x == null || x == '') {
 		alert(msg);
 		return false;
 	} else return true;
 }
-
 function validate() {
-//alert('length = '+ document.forms["sbForm"]["sound"].files.length);
-	if (validateX(document.forms["sbForm"]["sound"].files.length, "You haven't recorded anything yet!"))
-		if (validateX(document.forms["sbForm"]["user"].value, "Please fill in your name!"))
-			if (validateX(document.forms["sbForm"]["desc"].value, "Please fill in a title!"))
+//alert('length = '+ document.forms['sbForm']['sound'].files.length);
+	if (validateX(document.forms['sbForm']['sound'].files.length, 'You haven\'t recorded anything yet!'))
+		if (validateX(document.forms['sbForm']['user'].value, 'Please fill in your name!'))
+			if (validateX(document.forms['sbForm']['desc'].value, 'Please fill in a title!'))
 				return true;
 	return false;
-}
-
-function credits() {
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open('GET', 'credits.htm', false);
-	xmlHttp.send(null);
-	contents.innerHTML=xmlHttp.responseText;
-	window.scroll(0,0);
 }
 
 // https://dobrian.github.io/cmp/topics/sample-recording-and-playback-with-web-audio-api/3.microphone-input-and-recording.html
@@ -107,6 +113,35 @@ let
 	mediaRecorder = false,
 	timer = null,
 	stream = false;
+
+async function recStartStop() {
+	let isRecording = mediaRecorder.state == 'recording';
+	if (isRecording) {
+		await mediaRecorder.stop();
+		stopTimer(recordbtn);
+	} else {
+		playbtn.disabled = true;
+		await tryInBrowserRecording();
+		mediaRecorder.start();
+		recordbtn.timer = playbtn.timer = 0;
+		startTimer(recordbtn);
+	}
+	isRecording ^= 1;
+	if (isRecording)
+		recordbtn.classList.add('recording');
+	else
+		recordbtn.classList.remove('recording');
+}
+
+function playStartStop() {
+	if (localplay.paused) {
+		localplay.play();
+		startTimer(playbtn);
+	} else {
+		localplay.pause();
+		stopTimer(playbtn);
+	}
+}
 
 async function tryInBrowserRecording() {
 	if (navigator.mediaDevices) {
@@ -122,7 +157,8 @@ async function tryInBrowserRecording() {
 				chunks = [];
 				const audioURL = window.URL.createObjectURL(blob);
 				localplay.src = audioURL;
-				const fileName = 'Recording'+ Date.now() +'.ogg';
+				const extension = fileType.match(/audio\/([a-z]+)\;/i);
+				const fileName = 'Recording'+ Date.now() +'.'+ (extension ? extension[1] : 'webm');
 				const file = new File([blob], fileName, { type: fileType, lastModified: Date.now() });
 				const container = new DataTransfer();
 				container.items.add(file);
@@ -138,42 +174,6 @@ async function tryInBrowserRecording() {
 	}
 	record.style.display = 'none';
 	sound.hidden = false;
-}
-
-function playStartStop() {
-	let isPaused = localplay.paused;
-	if (isPaused) {
-		localplay.play();
-		startTimer(playbtn);
-	} else {
-		localplay.pause();
-		stopTimer(playbtn);
-	}
-}
-
-localplay.onended = () => {
-	if (form.style.display == 'block') {
-		stopTimer(playbtn);
-		playbtn.timer = 0;
-	} else {
-		remoteplaying = false;
-	}
-};
-
-async function recStartStop() {
-	let isRecording = mediaRecorder.state == 'recording';
-	if (isRecording) {
-		await mediaRecorder.stop();
-		stopTimer(recordbtn);
-	} else {
-		playbtn.disabled = true;
-		await tryInBrowserRecording();
-		mediaRecorder.start();
-		recordbtn.timer = playbtn.timer = 0;
-		startTimer(recordbtn);
-	}
-	isRecording ^= 1;
-	recordbtn.className = isRecording ? 'on' : '';
 }
 
 function startTimer(btn) {
@@ -197,14 +197,13 @@ function startTimer(btn) {
 
 	btn.timer += 1;
 
-	if (btn == recordbtn && btn.timer > maxRecordTime) {
+	if (btn == recordbtn && btn.timer > maxRecordingTime) {
 		recStartStop();
 		alert('This message is too long. The recording has been stopped.');
 	}
 }
 
 function stopTimer(btn) {
-console.log(btn);
 	clearInterval(timer);
 	btn.timed = false;
 	btn.style.color = '';

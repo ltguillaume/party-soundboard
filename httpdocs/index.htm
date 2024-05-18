@@ -5,21 +5,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<meta name="referrer" content="no-referrer">
-	<script>
-		const partyUrl = '';	// https://festify.us/party/???
-
-		function credits() {
-			var xmlHttp = new XMLHttpRequest();
-			xmlHttp.open('GET', 'credits.htm', false);
-			xmlHttp.send(null);
-			contents.innerHTML=xmlHttp.responseText;
-			window.scroll(0,0);
-		}
-
-		function refresh() {
-			location.href = location.href;
-		}
-	</script>
 	<title>Party Music</title>
 </head>
 <body>
@@ -28,9 +13,16 @@
 		<div id="buttons"><img title="Vernieuwen" onclick="refresh()" src="images/refresh.svg" alt=""></div>
 	</div>
 	<div id="contents">
-		<button class="navbtn" onclick="location.assign('soundboard.php')"><h1><img src="images/record.svg" width="100px"></h1>Play/record messages</button>
-		<button class="navbtn" onclick="if (partyUrl) location.assign(partyUrl); else this.disabled = true"><h1><img src="images/playlist.svg" width="100px"></h1>Request songs</button>
-		<div id="creditsbtn" onclick="credits()">Credits</div>
+		<button id="soundboardbtn" class="navbtn" onclick="location.assign('soundboard.php')"><h1><img src="images/record.svg" width="100px"></h1>Play/record messages</button>
+		<button id="playlistbtn" class="navbtn" onclick="location.assign(partyUrl)"><h1><img src="images/playlist.svg" width="100px"></h1>Request songs</button>
+		<div id="bottomnav">
+			<div onclick="location.search = 'credits'">Credits</div>
+		</div>
 	</div>
+	<script src="soundboard.js"></script>
+	<script>
+		const partyUrl = '';	// https://festify.us/party/???
+		if (!partyUrl) playlistbtn.disabled = true;
+	</script>
 </body>
 </html>
