@@ -1,0 +1,4 @@
+<?php
+	$partyUrl = '';	// e.g. https://festify.us/party/???
+	$password = 'begone';
+?>

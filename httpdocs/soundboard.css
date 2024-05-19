@@ -129,6 +129,18 @@ input[type=submit] {
 
 #form { display: none; }
 
+#credits { padding: 0 10px }
+#credits h2 {
+	padding: 10px 0;
+	font-size: 22px;
+}
+#credits a { color: darkgrey }
+#credits div {
+	padding: 10px 36px;
+	background: none no-repeat left center;
+}
+#credits p { padding: 10px 0 }
+
 #bottomnav {
 	margin-top: 60px;
 	text-align: center;
@@ -193,6 +205,6 @@ input[type=submit] {
 .hidden { display: none }
 
 input:focus,
-button:not([disabled]):hover, #buttons img:hover,
+#buttons img:hover, button:not([disabled]):hover, input[type=button]:hover,
 #bottomnav > div:hover, .sound:hover { background: #2b2e33 }
 input[type=submit]:hover { background: #4b4e52 }

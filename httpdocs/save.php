@@ -13,7 +13,7 @@ if (is_uploaded_file($_FILES['sound']['tmp_name']))
 	if (move_uploaded_file($source, 'uploads/'. $upload)) {
 		$sounddesc = $upload ."\r\n". ucfirst($_POST['desc']) ."\r\n". ucfirst($_POST['user']);
 		if (file_put_contents('sounds/'. $sound, $sounddesc)) {
-			header('Location: soundboard.php');
+			header('Location: index.php?soundboard');
 		} else {
 			echo "<p style='color:red'>You broke it! (file_put_contents)";
 		}

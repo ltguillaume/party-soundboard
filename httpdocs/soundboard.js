@@ -1,13 +1,17 @@
 const maxRecordingTime = 30;	// in seconds
-const localplay = document.getElementById('localplay') || null;
-if (localplay) localplay.onended = playingEnded;
-let remoteplay = adminmode = playingid = false;
+
+let adminmode = playingid = remoteplay = false;
+if (location.search == '?admin') adminSwitch();
+else if (document.empty) recordSwitch();
 if (document.getElementById('output') && document.remoteplay == 1)
 	outputSwitch(true);
-if (location.search == '?admin') adminSwitch();
-if (location.search == '?credits') credits();
+
+const localplay = document.getElementById('localplay');
+if (localplay) localplay.onended = playingEnded;
+
 if (/^((?!chrome).)*safari/i.test(navigator.userAgent))
 	adminbtn.classList.remove('hidden');
+
 function outputSwitch(registered = false) {
 	remoteplay = registered ? true : !remoteplay;
 	if (registered && localStorage.getItem('remoteplay') == 'false')
@@ -21,29 +25,28 @@ function outputSwitch(registered = false) {
 	if (!registered)
 		localStorage.setItem('remoteplay', remoteplay);
 }
+
 function adminSwitch(e = false) {
 	if (e) e.preventDefault();
 	if (adminmode)
-		refresh();
-	else if (location.search == '?admin' || confirm('Enter admin mode?')) {
+		location.search = 'soundboard';
+	else if (location.search == '?admin' || confirm(adminbtn.dataset.adminMode)) {
 		adminmode = true;
-		title.textContent = 'Admin🛡';
+		title.textContent = adminbtn.dataset.adminTitle +'🛡';
 	}
 }
-async function credits() {
-	const response = await fetch('credits.htm');
-	contents.innerHTML = await response.text();
-	window.scroll(0,0);
-}
+
 async function recordSwitch() {
 	const showing = (form.style.display == 'block' ? true : false);
 	if (!showing) await tryInBrowserRecording();
 	contents.style.display = (showing ? 'block' : 'none');
 	form.style.display = (showing ? 'none' : 'block');
 }
+
 function refresh() {
-	location.href = location.href.replace(location.search, '');
+	location.reload();
 }
+
 function play(el) {
 	if (adminmode) return remove(el);
 	if (playingid) return false;
@@ -52,7 +55,7 @@ function play(el) {
 	const sound = document.getElementById(playingid),
 		playing = document.getElementById(playingid +'-playing');
 	playing.style.display = 'block';
-	playing.innerHTML ='Playing...';
+	playing.innerHTML = contents.dataset.playing +'...';
 	sound.classList.add('selected');
 	if (remoteplay) {
 		fetch('remoteplay.php?file='+ file);
@@ -62,6 +65,7 @@ function play(el) {
 		localplay.play();
 	}
 }
+
 function playingEnded() {
 	if (form.style.display == 'block') {
 		stopTimer(playbtn);
@@ -72,6 +76,7 @@ function playingEnded() {
 		playingid = false;
 	}
 };
+
 function remove(el) {
 	if (el.removing) return false;
 	el.removing = true;
@@ -85,25 +90,27 @@ function remove(el) {
 	delForm.action = 'remove.php';
 	delForm.method = 'post';
 	passInput.name = passInput.type = 'password';
-	passInput.placeholder = 'Password...';
+	passInput.placeholder = contents.dataset.password +'...';
 	submitBtn.name = submitBtn.type = 'submit';
-	submitBtn.value = 'Remove';
+	submitBtn.value = contents.dataset.remove;
 	delForm.appendChild(fileInput);
 	delForm.appendChild(passInput);
 	delForm.appendChild(submitBtn);
 	el.appendChild(delForm);
 }
+
 function validateX(x, msg) {
 	if (x == 0 || x == null || x == '') {
 		alert(msg);
 		return false;
 	} else return true;
 }
+
 function validate() {
 //alert('length = '+ document.forms['sbForm']['sound'].files.length);
-	if (validateX(document.forms['sbForm']['sound'].files.length, 'You haven\'t recorded anything yet!'))
-		if (validateX(document.forms['sbForm']['user'].value, 'Please fill in your name!'))
-			if (validateX(document.forms['sbForm']['desc'].value, 'Please fill in a title!'))
+	if (validateX(document.forms['sbForm']['sound'].files.length, form.dataset.noRecording))
+		if (validateX(document.forms['sbForm']['user'].value, form.dataset.noName))
+			if (validateX(document.forms['sbForm']['desc'].value, form.dataset.noTitle))
 				return true;
 	return false;
 }
@@ -199,7 +206,7 @@ function startTimer(btn) {
 
 	if (btn == recordbtn && btn.timer > maxRecordingTime) {
 		recStartStop();
-		alert('This message is too long. The recording has been stopped.');
+		alert(form.dataset.tooLong);
 	}
 }
 
@@ -208,7 +215,7 @@ function stopTimer(btn) {
 	btn.timed = false;
 	btn.style.color = '';
 	if (btn == playbtn)
-		btn.innerHTML = localplay.ended ? '<h1>▶️</h1>Play' : btn.innerHTML.replace('⏸️', '▶️');
+		btn.innerHTML = localplay.ended ? '<h1>▶️</h1>'+ btn.dataset.play : btn.innerHTML.replace('⏸️', '▶️');
 	else
 		btn.innerHTML = btn.innerHTML.replace('⏹', '⏺️');
 }

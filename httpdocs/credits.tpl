@@ -1,16 +1,7 @@
-<style>
-	#credits { padding: 0 10px }
-	#credits h2 {
-		padding: 10px 0;
-		font-size: 22px;
-	}
-	#credits a { color: darkgrey }
-	#credits div {
-		padding: 10px 36px;
-		background: none no-repeat left center;
-	}
-	#credits p { padding: 10px 0 }
-</style>
+<div id="navbar">
+	<div id="title" onclick="refresh()">{credits}</div>
+	<div id="buttons"><img title="{refresh}" onclick="refresh()" src="images/refresh.svg" alt=""></div>
+</div>
 <div id="credits">
 	<h2>Festify</h2>
 	<p><a href="https://github.com/Festify/app">Festify Host & Client</a> (LGPLv3)</p>
@@ -27,5 +18,5 @@
 	<p><a href="soundboard-client.exe">Speaker client</a> by <a href="https://codeberg.org/ltguillaume">ltguillaume</a> (AGPLv3)</p>
 </div>
 <div id="bottomnav">
-	<div onclick="history.back()">Terug</div>
+	<div onclick="history.back()">{back}</div>
 </div>
