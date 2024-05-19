@@ -83,13 +83,12 @@ input[type=submit] {
 
 	#title {
 		line-height: 58px;
-		margin-left: 4px;
-		padding-left: 50px;
+		padding-left: 58px;
 		font-size: 22px;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		background: url('favicon.ico') no-repeat 5px/42px;
+		background: url('favicon.ico') no-repeat 10px/42px;
 		cursor: pointer;
 	}
 /*
