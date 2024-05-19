@@ -164,8 +164,8 @@ async function tryInBrowserRecording() {
 				chunks = [];
 				const audioURL = window.URL.createObjectURL(blob);
 				localplay.src = audioURL;
-				const extension = fileType.match(/audio\/([a-z]+)\;/i);
-				const fileName = 'Recording'+ Date.now() +'.'+ (extension ? extension[1] : 'webm');
+				const extension = fileType.match(/audio\/([a-z0-9]+)/i);
+				const fileName = 'Recording'+ Date.now() +'.'+ (extension ? extension[1] : 'mp4');
 				const file = new File([blob], fileName, { type: fileType, lastModified: Date.now() });
 				const container = new DataTransfer();
 				container.items.add(file);
