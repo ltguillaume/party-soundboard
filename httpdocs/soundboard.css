@@ -74,7 +74,7 @@ input[type=submit] {
 	position: sticky;
 	top: 0;
 	left: 0;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 	color: white;
 	background: #282b30;
 	border-bottom: 1px rgba(0, 0, 0, 0.2) solid;
@@ -123,7 +123,6 @@ input[type=submit] {
 
 #contents, #form {
 	width: 100%;
-	padding-bottom: 40px;
 	line-height: 150%;
 }
 
@@ -131,18 +130,19 @@ input[type=submit] {
 
 #credits { padding: 0 10px }
 #credits h2 {
-	padding: 10px 0;
+	padding-top: 20px;
 	font-size: 22px;
 }
+	#credits h2:first-of-type { padding-top: 0 }
 #credits a { color: darkgrey }
 #credits div {
 	padding: 10px 36px;
 	background: none no-repeat left center;
 }
-#credits p { padding: 10px 0 }
+#credits p { padding-top: 10px }
 
 #bottomnav {
-	margin-top: 60px;
+	margin: 60px 0;
 	text-align: center;
 }
 	#bottomnav > div { margin-top: 20px }
