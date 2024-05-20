@@ -37,10 +37,14 @@ function adminSwitch(e = false) {
 }
 
 async function recordSwitch() {
-	const showing = (form.style.display == 'block' ? true : false);
-	if (!showing) await tryInBrowserRecording();
-	contents.style.display = (showing ? 'block' : 'none');
-	form.style.display = (showing ? 'none' : 'block');
+	if (!form.classList.contains('shown')) {
+		await tryInBrowserRecording();
+		form.classList.add('shown');
+		contents.classList.add('disabled');
+	} else {
+		form.classList.remove('shown');
+		contents.classList.remove('disabled');
+	}
 }
 
 function refresh() {
@@ -67,7 +71,7 @@ function play(el) {
 }
 
 function playingEnded() {
-	if (form.style.display == 'block') {
+	if (form.classList.contains('shown')) {
 		stopTimer(playbtn);
 		playbtn.timer = 0;
 	} else {

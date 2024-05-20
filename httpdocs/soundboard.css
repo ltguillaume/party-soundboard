@@ -123,9 +123,27 @@ input[type=submit] {
 #contents, #form {
 	width: 100%;
 	line-height: 150%;
+	transition: opacity .4s ease;
+	overflow-anchor: none;
 }
+	#contents.disabled {
+		opacity: .1;
+		pointer-events: none;
+	}
+	#contents > div { animation: drop-in .4s ease-out }
+		@keyframes drop-in { from { transform: translateY(100vh) }}
+	#contents > div > img { animation: drop-in-left .5s ease-out }
+		@keyframes drop-in-left { from { transform: translateX(-100vw) }}
 
-#form { display: none; }
+#form {
+	position: absolute;
+	top: -100%;
+	padding: 80px 0 20px 0;
+	background: #1c1f24;
+	border-bottom: 1px rgba(0, 0, 0, 0.2) solid;
+	transition: top .4s ease;
+}
+	#form.shown { top: 0 }
 
 #credits { padding: 0 10px }
 #credits h2 {
