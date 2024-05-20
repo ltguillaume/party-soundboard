@@ -24,6 +24,7 @@ html, body {
 	font-family: 'Open Sans', Helvetica, sans-serif;
 	background: #1c1f24;
 	color: #fff;
+	overflow: auto;
 }
 
 form {
@@ -159,7 +160,7 @@ input[type=submit] {
 #credits p { padding-top: 10px }
 
 #bottomnav {
-	margin: 60px 0;
+	margin: 42px 0 20px 0;
 	text-align: center;
 }
 	#bottomnav > div { margin-top: 20px }
