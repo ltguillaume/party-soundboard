@@ -7,7 +7,7 @@ if (document.getElementById('output') && document.remoteplay == 1)
 	outputSwitch(true);
 
 const localplay = document.getElementById('localplay');
-if (localplay) localplay.onended = playingEnded;
+if (localplay) localplay.onended = localplay.onerror = playbackEnded;
 
 if (/^((?!chrome).)*safari/i.test(navigator.userAgent))
 	adminbtn.classList.remove('hidden');
@@ -58,25 +58,30 @@ function play(el) {
 	const file = el.getAttribute('src');
 	const sound = document.getElementById(playingid),
 		playing = document.getElementById(playingid +'-playing');
-	playing.style.display = 'block';
-	playing.innerHTML = contents.dataset.playing +'...';
+	sound.style.color = '';
 	sound.classList.add('selected');
+	playing.innerHTML = contents.dataset.playing +'...';
+	playing.style.display = 'block';
 	if (remoteplay) {
 		fetch('remoteplay.php?file='+ file);
-		setTimeout(playingEnded, 5000);
+		setTimeout(playbackEnded, 5000);
 	} else {
 		localplay.src = 'uploads/'+ file;
 		localplay.play();
 	}
 }
 
-function playingEnded() {
+function playbackEnded(event = false) {
 	if (form.classList.contains('shown')) {
 		stopTimer(playbtn);
 		playbtn.timer = 0;
 	} else {
-		document.getElementById(playingid +'-playing').style.display = 'none';
-		document.getElementById(playingid).classList.remove('selected');
+		const sound = document.getElementById(playingid),
+			playing = document.getElementById(playingid +'-playing');
+		playing.style.display = 'none';
+		sound.classList.remove('selected');
+		if (event && event.type == 'error')
+			sound.style.color = 'red';
 		playingid = false;
 	}
 };
@@ -198,9 +203,9 @@ function startTimer(btn) {
 	if (seconds < 10)
 		seconds = '0'+ seconds;
 
-	if (minutes > 0 || seconds > 6)
+	if (minutes > 0 || seconds > 7)
 		btn.style.color = 'red';
-	else if (minutes == 0 && seconds > 3)
+	else if (minutes == 0 && seconds > 4)
 		btn.style.color = 'orange';
 	else
 		btn.style.color = '';
