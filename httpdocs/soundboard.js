@@ -19,9 +19,9 @@ function outputSwitch(registered = false) {
 	output.src = remoteplay ? 'images/switch-on.svg' : 'images/switch-off.svg';
 	if (registered) output.classList.remove('hidden');
 	if (remoteplay)
-		outputmsg.classList.remove('hidden');
+		document.body.classList.add('remoteplay');
 	else
-		outputmsg.classList.add('hidden');
+		document.body.classList.remove('remoteplay');
 	if (!registered)
 		localStorage.setItem('remoteplay', remoteplay);
 }
@@ -55,8 +55,9 @@ function play(el) {
 	if (adminmode) return remove(el);
 	if (playingid) return false;
 	playingid = el.getAttribute('id');
-	const file = el.getAttribute('src');
-	const sound = document.getElementById(playingid),
+	const
+		file = el.getAttribute('src');
+		sound = document.getElementById(playingid),
 		playing = document.getElementById(playingid +'-playing');
 	sound.style.color = '';
 	sound.classList.add('selected');
@@ -72,11 +73,11 @@ function play(el) {
 }
 
 function playbackEnded(event = false) {
-	if (form.classList.contains('shown')) {
+	if (form.classList.contains('shown'))
 		stopTimer(playbtn);
-		playbtn.timer = 0;
-	} else {
-		const sound = document.getElementById(playingid),
+	else {
+		const
+			sound = document.getElementById(playingid),
 			playing = document.getElementById(playingid +'-playing');
 		playing.style.display = 'none';
 		sound.classList.remove('selected');
@@ -89,7 +90,8 @@ function playbackEnded(event = false) {
 function remove(el) {
 	if (el.removing) return false;
 	el.removing = true;
-	const delForm = document.createElement('form'),
+	const
+		delForm = document.createElement('form'),
 		fileInput = document.createElement('input'),
 		passInput = document.createElement('input'),
 		submitBtn = document.createElement('input');
@@ -127,26 +129,23 @@ function validate() {
 // https://dobrian.github.io/cmp/topics/sample-recording-and-playback-with-web-audio-api/3.microphone-input-and-recording.html
 let
 	mediaRecorder = false,
-	timer = null,
 	stream = false;
 
 async function recStartStop() {
-	let isRecording = mediaRecorder.state == 'recording';
+	let isRecording = mediaRecorder && mediaRecorder.state == 'recording';
 	if (isRecording) {
 		await mediaRecorder.stop();
 		stopTimer(recordbtn);
+		recordbtn.classList.remove('recording');
 	} else {
+		localplay.pause();
+		stopTimer(playbtn);
 		playbtn.disabled = true;
 		await tryInBrowserRecording();
 		mediaRecorder.start();
-		recordbtn.timer = playbtn.timer = 0;
 		startTimer(recordbtn);
-	}
-	isRecording ^= 1;
-	if (isRecording)
 		recordbtn.classList.add('recording');
-	else
-		recordbtn.classList.remove('recording');
+	}
 }
 
 function playStartStop() {
@@ -166,20 +165,23 @@ async function tryInBrowserRecording() {
 			mediaRecorder = new MediaRecorder(stream);
 			let chunks = [];
 			mediaRecorder.ondataavailable = (e) => { chunks.push(e.data) };
+			mediaRecorder.onstart = (e) => { recordbtn.startTime = e.timeStamp };
 			mediaRecorder.onstop = () => {
 				stream.getTracks().forEach((track) => { track.stop() });
-				const fileType = chunks[0].type;
-				const blob = new Blob(chunks, { 'type': fileType });
-				chunks = [];
-				const audioURL = window.URL.createObjectURL(blob);
-				localplay.src = audioURL;
-				const extension = fileType.match(/audio\/([a-z0-9]+)/i);
-				const fileName = 'Recording'+ Date.now() +'.'+ (extension ? extension[1] : 'mp4');
-				const file = new File([blob], fileName, { type: fileType, lastModified: Date.now() });
-				const container = new DataTransfer();
+				stream = null;
+				const
+					fileType = chunks[0].type,
+					blob = new Blob(chunks, { 'type': fileType }),
+					extension = fileType.match(/audio\/([a-z0-9]+)/i),
+					fileName = 'Recording'+ Date.now() +'.'+ (extension ? extension[1] : 'mp4'),
+					file = new File([blob], fileName, { type: fileType, lastModified: Date.now() }),
+					container = new DataTransfer();
 				container.items.add(file);
 				sound.files = container.files;
+				audioURL = window.URL.createObjectURL(sound.files[0]),
+				localplay.src = audioURL;
 				playbtn.disabled = false;
+				chunks = [];
 			}
 			record.style.display = '';
 			sound.hidden = true;
@@ -193,13 +195,15 @@ async function tryInBrowserRecording() {
 }
 
 function startTimer(btn) {
-	if (!btn.timed) {
-		timer = setInterval(startTimer, 1000, btn);
-		btn.timed = true;
+	if (!btn.timer) {
+		btn.timer = setInterval(startTimer, 1000, btn);
+		recordbtn.startTime = performance.now();
 	}
 
-	let minutes = Math.floor(btn.timer / 60);
-	let seconds = btn.timer % 60;
+	const
+		time = btn == playbtn ? Math.round(localplay.currentTime) : Math.round((performance.now() - recordbtn.startTime) / 1000),
+		minutes = Math.floor(time / 60);
+	let seconds = time % 60;
 	if (seconds < 10)
 		seconds = '0'+ seconds;
 
@@ -211,17 +215,15 @@ function startTimer(btn) {
 		btn.style.color = '';
 	btn.innerHTML = `<h1>${btn == playbtn ? '⏸️' : '⏹'}</h1>${minutes}:${seconds}`;
 
-	btn.timer += 1;
-
-	if (btn == recordbtn && btn.timer > maxRecordingTime) {
+	if (btn == recordbtn && time > maxRecordingTime) {
 		recStartStop();
 		alert(form.dataset.tooLong);
 	}
 }
 
 function stopTimer(btn) {
-	clearInterval(timer);
-	btn.timed = false;
+	clearInterval(btn.timer);
+	btn.timer = false;
 	btn.style.color = '';
 	if (btn == playbtn)
 		btn.innerHTML = localplay.ended ? '<h1>▶️</h1>'+ btn.dataset.play : btn.innerHTML.replace('⏸️', '▶️');

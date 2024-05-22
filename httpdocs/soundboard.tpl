@@ -1,7 +1,7 @@
 <div id="navbar">
 	<div id="title" onclick="adminmode ? adminSwitch() : refresh()" oncontextmenu="adminSwitch(event)">{soundboard}</div>
 	<div id="buttons"><img id="output" class="hidden" title="{output}" onclick="outputSwitch()" src="images/switch-on.svg" alt=""><img title="{record}" onclick="recordSwitch()" src="images/record.svg" alt=""><img title="{refresh}" onclick="refresh()" src="images/refresh.svg" alt=""></div>
-	<div id="outputmsg" class="hidden"><img src="images/switch-on.svg" height="12px"> {output-msg}</div>
+	<div id="outputmsg"><img src="images/switch-on.svg" height="12px"> {output-msg}</div>
 </div>
 <div id="contents" data-playing="{playing}" data-password="{password}" data-remove="{remove}">
 	{contents}

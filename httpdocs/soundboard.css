@@ -114,12 +114,14 @@ input[type=submit] {
 		}
 
 		#outputmsg {
+			display: none;
 			width: 100%;
 			padding: 2px 0 3px 0;
 			text-align: center;
 			background: #494c50;
 			border-bottom: 1px rgba(0, 0, 0, 0.2) solid;
 		}
+			body.remoteplay #outputmsg { display: block }
 
 #contents, #form {
 	width: 100%;
@@ -145,6 +147,7 @@ input[type=submit] {
 	transition: top .4s ease;
 }
 	#form.shown { top: 0 }
+	body.remoteplay #form { padding-top: 100px }
 
 #credits { padding: 0 10px }
 #credits h2 {
