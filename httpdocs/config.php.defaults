@@ -1,4 +1,11 @@
 <?php
-	$partyUrl = '';	// e.g. https://festify.us/party/???
-	$password = 'begone';
+
+$config = (object) [
+
+	'partyUrl' => '',	// e.g. https://festify.us/party/???
+	'password' => 'party time excellent',
+	'noUpload' => false,	// Prevent users from recording new soundbites
+
+];
+
 ?>

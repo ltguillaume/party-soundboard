@@ -1,9 +1,16 @@
 <?php
-	@include 'config.php';
 
-	$file = $_POST['file'];
-	$pass = $_POST['password'];
-	if ($file && $pass == ($password ?? 'begone'))
-		rename("sounds/$file", "sounds/.$file");
-	header('Location: index.php?admin');
+@include 'config.php';
+
+$pass  = $password ?? 'party time excellent';
+$file = $_POST['file'] ?? false;
+$input = $_POST['password'] ?? false;
+
+if (!$file)
+	return http_response_code(400);
+if ($input != $pass)
+	return http_response_code(401);
+if (!rename("sounds/$file", "sounds/.$file"))
+	return http_response_code(410);
+
 ?>

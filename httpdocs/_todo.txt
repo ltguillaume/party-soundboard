@@ -1,15 +1,16 @@
 1. Upload this folder to your server
 
 2. Make sure the following file and folders can be written to by the web server:
-   /queue.lst
-   /remoteplay
-   /sounds/
-   /uploads/
+   ./client.cue
+   ./client.id
+   ./sounds/
+   ./uploads/
 
 3. Copy config.php.defaults to config.php. Then edit the values inside:
-   - Change the default password "begone" to your preferred password for removing soundbites.
-   - Put the URL for your online playlist (e.g. Festify's https://festify.us/party/???) between the quotes after "$partyUrl =".
+   - Change the default password "party time excellent" to your preferred password for registering as remote playback client and removing soundbites.
+   - Put the URL for your online playlist (e.g. Festify's https://festify.us/party/???) between the quotes after "'partyUrl' =>".
      If the variable is empty, the landing page will be skipped.
+   - Set "noUpload" to true if you don't want users to be able to record new soundbites.
 
 ---
 

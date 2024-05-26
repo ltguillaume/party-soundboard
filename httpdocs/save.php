@@ -1,26 +1,33 @@
 <?php
 
-if (is_uploaded_file($_FILES['sound']['tmp_name']))
-{
-	$time = time();
-	$source = $_FILES['sound']['tmp_name'];
-	$path_parts = pathinfo($_FILES['sound']['name']);
-	$sound = time() ."_". preg_replace("([^\w\s\d\.\-_~,;:\[\]\(\]]|[\.]{2,})", '', $_POST['desc']);
-	while (file_exists($sound))
-		$sound = time() ."_". preg_replace("([^\w\s\d\.\-_~,;:\[\]\(\]]|[\.]{2,})", '', $_POST['desc']);
-	$upload = $sound .'.'. $path_parts['extension'];
+@include 'config.php';
 
-	if (move_uploaded_file($source, 'uploads/'. $upload)) {
-		$sounddesc = $upload ."\r\n". ucfirst($_POST['desc']) ."\r\n". ucfirst($_POST['user']);
-		if (file_put_contents('sounds/'. $sound, $sounddesc)) {
-			header('Location: index.php?soundboard');
-		} else {
-			echo "<p style='color:red'>You broke it! (file_put_contents)";
-		}
-	} else {
-		die("<p style='color:red'>Something went wrong while moving ". $_FILES['sound']['name'] ." on the server from ". $source ." to ". $upload);
-	}
-} else {
-	die("<p style='color:red'>Your file is too big or something went wrong while uploading ". $_FILES['sound']['name']);
-}
+if ($config->noUpload ?? false)
+	return http_response_code(405);
+if (isset($_GET['check']))
+	return;
+
+$source = $_FILES['sound']['tmp_name'] ?? false;
+$name = $_FILES['sound']['name'] ?? false;
+$desc = $_POST['desc'] ?? '';
+$user = $_POST['user'] ?? '';
+
+if (!is_uploaded_file($source))
+	return http_response_code(413);
+if (!$source || !$name)
+	return http_response_code(400);
+
+$time = time();
+$path_parts = pathinfo($name);
+do $sound = time() .'_'. preg_replace('([^\w\s\d\.\-_~,;:\[\]\(\]]|[\.]{2,})', '', $desc);
+while (file_exists($sound));
+$upload = $sound .'.'. $path_parts['extension'];
+$contents = $upload ."\r\n". ucfirst($desc) ."\r\n". ucfirst($user);
+
+if (!move_uploaded_file($source, 'uploads/'. $upload))
+	return http_response_code(500);
+
+if (!file_put_contents('sounds/'. $sound, $contents))
+	return http_response_code(507);
+
 ?>

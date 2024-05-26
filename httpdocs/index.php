@@ -1,5 +1,4 @@
 <?php
-//error_reporting(E_ALL);
 //header('Cache-Control: no-cache, no-store, must-revalidate'); // HTTP 1.1.//header('Pragma: no-cache'); // HTTP 1.0.//header('Expires: 0'); // Proxies.
 
 @include 'config.php';
@@ -14,11 +13,10 @@ foreach($langs as $lang) {
 		break;
 	}
 }
-if ($strings->en)
+if (isset($strings->en))
 	$strings = $strings->en;
 
-switch($_SERVER['QUERY_STRING']) {
-	case 'admin':
+switch ($_SERVER['QUERY_STRING']) {
 	case 'soundboard':
 		$title = $strings->soundboard;
 		$body = soundboard();
@@ -27,10 +25,13 @@ switch($_SERVER['QUERY_STRING']) {
 		$title = $strings->credits;
 		$body = file_get_contents('credits.tpl');
 		break;
+	case 'refresh':
+		echo soundboard(true);
+		return;
 	default:
-		if ($partyUrl) {
+		if ($config->partyUrl ?? false) {
 			$title = $strings->landing;
-			$body = file_get_contents('landing.tpl') . "<script>const partyUrl = '$partyUrl'</script>";
+			$body = file_get_contents('landing.tpl') . "<script>const partyUrl = '$config->partyUrl'</script>";
 		} else {
 			$title = $strings->soundboard;
 			$body = soundboard();
@@ -44,9 +45,8 @@ $page = str_replace('{body}', $body, $page);
 
 echo $page;
 
-function soundboard() {
-	$body = file_get_contents('soundboard.tpl');
-	$empty = 1;
+function soundboard($refresh = false) {
+	if (!$refresh) $body = file_get_contents('soundboard.tpl');
 
 	if ($dir = opendir('sounds')) {
 		while (($sound = readdir($dir)) !== false)
@@ -57,6 +57,7 @@ function soundboard() {
 			$empty = 0;
 			rsort($sounds);
 			$index = 1;
+			$contents = '';
 			foreach ($sounds as $sound) {
 				$id = 's'. $index;
 				$handle = @fopen('sounds/' . $sound, 'r');
@@ -64,7 +65,7 @@ function soundboard() {
 				$desc = rtrim(fgets($handle));
 				$user = rtrim(fgets($handle));
 				$userpic = file_exists('users/'. strtolower($user) .'.jpg') ? 'users/'. rawurlencode(strtolower($user) .'.jpg') : 'images/userdef.jpg';
-				$contents .= 	'<div class="sound" id="'. $id .'" sound="'. $sound .'" src="'. $file .'" onclick="play(this)">
+				$contents .= 	'<div class="sound" id="'. $id .'" data-sound="'. $sound .'" data-src="'. $file .'" onclick="play(this)">
 									<img class="userpic" alt="" src="' . $userpic .'"/>
 									<div class="description">'. $desc .'</div>
 									<div class="user">'. $user .'</div>
@@ -74,11 +75,15 @@ function soundboard() {
 				$index++;
 			}
 			closedir($dir);
-		}
+		} else $empty = 1;
 
-		$remoteplay = $_GET['remoteplay'] == '1' || file_get_contents('remoteplay') == '1' ? 1 : 0;
-		$contents .= "<script>document.remoteplay = $remoteplay; document.empty = $empty</script>";
-		$body = str_replace('{contents}', $contents, $body);
+		if ($refresh) {
+			return $contents;
+		} else {
+			$clientRegistered = file_get_contents('client.id') == '0' ? 0 : 1;
+			$contents .= "<script>document.extClientRegistered = $clientRegistered; document.empty = $empty</script>";
+			$body = str_replace('{contents}', $contents, $body);
+		}
 	}
 	return $body;
 }
