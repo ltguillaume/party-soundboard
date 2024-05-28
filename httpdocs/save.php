@@ -2,7 +2,7 @@
 
 @include 'config.php';
 
-if ($config->noUpload ?? false)
+if ($NOUPLOAD ?? false)
 	return http_response_code(405);
 if (isset($_GET['check']))
 	return;
@@ -27,7 +27,7 @@ $contents = $upload ."\r\n". ucfirst($desc) ."\r\n". ucfirst($user);
 if (!move_uploaded_file($source, 'uploads/'. $upload))
 	return http_response_code(500);
 
-if (!file_put_contents('sounds/'. $sound, $contents))
+if (!file_put_contents('sounds/'. $sound, $contents, LOCK_EX))
 	return http_response_code(507);
 
 ?>

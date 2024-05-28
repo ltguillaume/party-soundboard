@@ -7,8 +7,8 @@ if ($check && $clientId == '0')
 	exit('0');
 
 @include 'config.php';
+$password = $PASSWORD ?? 'party time excellent';
 
-$password = $config->password ?? 'party time excellent';
 $passHash = hash('sha256', $password);
 $passSent = $_POST['password'] ?? false;
 
@@ -64,7 +64,7 @@ if ($deregister) {
 		$clientId = 0;
 }
 
-if (!file_put_contents($clientIdFile, $clientId))
+if (!file_put_contents($clientIdFile, $clientId, LOCK_EX))
 	http_response_code(507);
 
 ?>

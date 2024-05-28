@@ -1,11 +1,7 @@
 <?php
 
-$config = (object) [
-
-	'partyUrl' => '',	// e.g. https://festify.us/party/???
-	'password' => 'party time excellent',
-	'noUpload' => false,	// Prevent users from recording new soundbites
-
-];
+$NOUPLOAD = 0;	// Prevent users from recording new soundbites
+$PARTYURL = '';	// Like https://festify.us/party/...
+$PASSWORD = 'party time excellent';	// To enter admin or client mode
 
 ?>

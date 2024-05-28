@@ -2,6 +2,7 @@
 //header('Cache-Control: no-cache, no-store, must-revalidate'); // HTTP 1.1.//header('Pragma: no-cache'); // HTTP 1.0.//header('Expires: 0'); // Proxies.
 
 @include 'config.php';
+$partyUrl = $PARTYURL ?? false;
 
 $page = file_get_contents('index.tpl');
 $strings = json_decode(file_get_contents('strings.json'));
@@ -29,9 +30,9 @@ switch ($_SERVER['QUERY_STRING']) {
 		echo soundboard(true);
 		return;
 	default:
-		if ($config->partyUrl ?? false) {
+		if ($partyUrl) {
 			$title = $strings->landing;
-			$body = file_get_contents('landing.tpl') . "<script>const partyUrl = '$config->partyUrl'</script>";
+			$body = file_get_contents('landing.tpl') . '<script>const partyUrl = "'. $partyUrl .'"</script>';
 		} else {
 			$title = $strings->soundboard;
 			$body = soundboard();

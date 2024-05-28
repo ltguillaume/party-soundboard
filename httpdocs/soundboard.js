@@ -47,12 +47,39 @@ async function outputSwitch(registered = false) {
 
 function adminSwitch(e = false) {
 	if (e) e.preventDefault();
-	if (adminMode)
-		location.reload();
-	else if (confirm(adminbtn.dataset.adminPrompt)) {
+	if (adminMode) {
+		adminMode = false;
+		title.textContent = title.dataset.title;
+		configform.classList.add('hidden');
+	} else if (confirm(adminbtn.dataset.adminPrompt)) {
 		adminMode = true;
 		title.textContent = title.dataset.adminTitle +'🛡';
+		configform.classList.remove('hidden');
+		getConfig();
 	}
+}
+
+async function getConfig() {
+	const response = await fetch('setconfig.php?get');
+	const config = await response.json();
+	configform['no-upload'].checked = config['no-upload'];
+	configform['party-url'].value = config['party-url'];
+}
+
+async function setConfig(e) {
+	e.preventDefault();
+	configform.password.classList.remove('error');
+	const response = await fetch('setconfig.php', {
+		method: 'POST',
+		body: new FormData(configform)
+	});
+	if (response.status == 401)
+		configform.password.classList.add('error');
+	else if (response.status == 406)
+		alert(configform.dataset.noQuotes);
+	else if (response.status == 200)
+		refresh();
+	else alert(response.status);
 }
 
 async function clientSwitch(clientRegistered = false) {
@@ -83,6 +110,7 @@ async function clientSwitch(clientRegistered = false) {
 
 async function clientRegister(e) {
 	e.preventDefault();
+	clientform.password.classList.remove('error');
 	const response = await fetch('client.php?register', {
 		method: 'POST',
 		body: new FormData(clientform)
@@ -138,7 +166,7 @@ async function recordSwitch() {
 		contents.classList.remove('disabled');
 	} else {
 		const response = await fetch('save.php?check');
-		if (response.status == 405) return alert(recform.dataset.noUpload);
+		if (response.status == 405) return alert(recform.dataset.noUpload +'!');
 		await tryInBrowserRecording();
 		recpanel.classList.add('shown');
 		contents.classList.add('disabled');
@@ -278,7 +306,7 @@ async function save(e) {
 			recform.desc.value = '';
 			break;
 		case 405:
-			return alert(recform.dataset.noUpload);
+			return alert(recform.dataset.noUpload +'!');
 		default:
 			return alert(`${recform.dataset.errorSaving} (${response.status})`);
 	}
