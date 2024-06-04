@@ -5,7 +5,7 @@ _Soundboard is a simple mobile web-based soundboard system with the ability to r
 
 #### Included
 - Soundboard web system (can be used as stand-alone system)
-- Admin mode to remove uploaded soundbites:
+- Admin mode to prevent new uploads, remove uploaded soundbites and set the link to the party playlist for the landing page:
 	- Safari/iOS: scroll down to the "Manage sounds" button
 	- Otherwise: right-click (long-press) the title bar
 - The soundboard includes a remote playback client mode to receive playback commands from other users
@@ -14,6 +14,5 @@ _Soundboard is a simple mobile web-based soundboard system with the ability to r
 #### Dependencies
 - For [Festify](https://getfestify.com), you'll need a [Spotify Premium](https://spotify.com) account.
 
-#### Screenshots
-###### Soundboard:  
+#### Screenshot
 ![Soundboard](SCREENSHOT.png)
