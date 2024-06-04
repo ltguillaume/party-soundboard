@@ -1,6 +1,6 @@
 const maxRecordingTime = 30;	// in seconds
 
-let adminMode = audioContext = clientTimer = playingId = remotePlay = false;
+let adminMode = audioContext = clientWorker = playingId = remotePlay = false;
 let queue = sounds = [];
 
 if (location.search == '?credits')
@@ -24,7 +24,7 @@ async function extClientRegistered() {
 }
 
 async function outputSwitch(registered = false) {
-	if (clientTimer) return clientSwitch();
+	if (clientWorker) return clientSwitch();
 	remotePlay = registered ? true : !remotePlay;
 	if (registered && localStorage.getItem('remotePlay') == 'false')
 		remotePlay = false;
@@ -83,9 +83,9 @@ async function setConfig(e) {
 }
 
 async function clientSwitch(clientRegistered = false) {
-	if (clientTimer) {
-		clearInterval(clientTimer);
-		clientTimer = false;
+	if (clientWorker) {
+		clientWorker.terminate();
+		clientWorker = false;
 		deregisterClient();
 		return outputSwitch();
 	}
@@ -104,7 +104,10 @@ async function clientSwitch(clientRegistered = false) {
 	}
 	document.body.classList.remove('clientregister');
 	sounds = contents.querySelectorAll('.sound');
-	clientTimer = setInterval(clientMode, 2000);
+	clientWorker = new Worker('client-worker.js');
+	clientWorker.onerror = (e) => alert(e.message);
+	clientWorker.onmessage = clientWorkerHandler;
+	clientWorker.postMessage('start');
 	window.addEventListener('beforeunload', deregisterClient);
 }
 
@@ -122,20 +125,13 @@ async function clientRegister(e) {
 	else alert(response.status);
 }
 
-async function clientMode() {
-	const response = await fetch('client.php?play');
-	switch (response.status) {
-		case 204:	// empty
-			return;
-		case 401:	// unauthorized
-		case 409:	// new client
+function clientWorkerHandler(e) {
+	switch (e.data) {
+		case 'client-change':
 			alert(outputbar.dataset.clientChange);
 			return clientSwitch();
 		default:
-			const
-				list = await response.text(),
-				files = list.split('\r\n');
-			queue = queue.concat(files);
+			queue = queue.concat(e.data);
 			if (localPlay.paused) clientPlayNext();
 	}
 }
@@ -209,7 +205,7 @@ function play(el) {
 	sound.classList.add('selected');
 	playing.innerHTML = contents.dataset.playing +'...';
 	playing.style.display = 'block';
-	if (!clientTimer && remotePlay)
+	if (!clientWorker && remotePlay)
 		playRemotely(file);
 	else {
 		if (audioContext.state == 'suspended')
@@ -252,7 +248,7 @@ function playbackEnded(event = false) {
 			sound.style.color = 'red';
 		playingId = false;
 	}
-	if (clientTimer && queue.length) clientPlayNext();
+	if (clientWorker && queue.length) clientPlayNext();
 };
 
 function removeForm(el) {
