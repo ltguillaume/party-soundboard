@@ -1,6 +1,7 @@
 <?php
 
 $file = file_get_contents('php://input') ?? false;
+$queue = 'client.cue';
 
 if (!$file)
 	return http_response_code(400);

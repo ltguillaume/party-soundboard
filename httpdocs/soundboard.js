@@ -195,7 +195,8 @@ function initCompressor() {
 
 function play(el) {
 	if (adminMode) return removeForm(el);
-	if (playingId) return false;
+	if (playingId && remotePlay && !clientWorker) return false;	// Wait for timeout before sending a new remote playback request
+	if (!remotePlay || clientWorker) playbackEnded();	// Remove 'Playing...' from current sound
 	playingId = el.id;
 	const
 		file = el.dataset.src;
@@ -237,8 +238,7 @@ async function playRemotely(file) {
 function playbackEnded(event = false) {
 	if (recpanel.classList.contains('shown'))
 		stopTimer(playbtn);
-	else {
-		if (!playingId) return;	// Client playback
+	else if (playingId) {	// Local playback
 		const
 			sound = document.getElementById(playingId),
 			playing = document.getElementById(playingId +'-playing');
