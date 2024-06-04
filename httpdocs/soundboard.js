@@ -174,7 +174,7 @@ async function recordSwitch() {
 }
 
 async function refresh() {
-//	location.reload();
+	if (location.search == '?credits') return location.reload();
 	const response = await fetch('index.php?refresh');
 	if (response.status != 200) return alert(`${recform.dataset.errorRefresh} (${response.status})`);
 	const newContents = await response.text();

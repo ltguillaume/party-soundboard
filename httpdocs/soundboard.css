@@ -158,13 +158,14 @@ label { margin: 5px }
 
 #recpanel {
 	position: absolute;
-	top: -100%;
+	top: 0;
 	padding-top: 80px;
 	background: #1c1f24;
 	border-bottom: 1px rgba(0, 0, 0, 0.2) solid;
-	transition: top .4s ease;
+	transform: translateY(-100%);
+	transition: transform .4s ease;
 }
-	#recpanel.shown { top: 0 }
+	#recpanel.shown { transform: none }
 	body.remoteplay #recpanel { padding-top: 100px }
 	body.remoteplay.clientregister #recpanel { padding-top: 160px }
 
