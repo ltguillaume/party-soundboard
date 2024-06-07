@@ -1,13 +1,18 @@
 @font-face {
+	font-family: 'Archistico';
+	src: url("archistico.woff2") format("woff2");
+}
+
+@font-face {
 	font-family: 'Open Sans';
 	font-weight: 300;
-	src: url('opensans-300.woff') format('woff');
+	src: url('opensans-300.woff2') format('woff2');
 }
 
 @font-face {
 	font-family: 'Open Sans';
 	font-weight: 400;
-	src: url('opensans-400.woff') format('woff');
+	src: url('opensans-400.woff2') format('woff2');
 }
 
 * {
@@ -89,16 +94,28 @@ label { margin: 5px }
 }
 
 	#title {
-		line-height: 58px;
-		padding-left: 58px;
+/*		padding-left: 58px;*/
 		font-size: 22px;
+		line-height: 58px;
+		text-overflow: ellipsis;
 		white-space: nowrap;
 		overflow: hidden;
-		text-overflow: ellipsis;
-		background: url('favicon.ico') no-repeat 10px/42px;
-/*		background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">📢</text></svg>') no-repeat 10px/42px;*/
+/*		background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="-.1em" y=".9em" font-size="90">📢</text></svg>') no-repeat 10px/42px;*/
 		cursor: pointer;
 	}
+		#title:before {
+			margin: 0 10px;
+			padding: 5px;
+			content: 'SB';
+			vertical-align: bottom;
+			font-family: Archistico;
+			font-size: 28px;
+			color: lightgreen;
+			border: 1px solid lightgreen;
+			border-radius: 50%;
+			animation: gradient 10s ease infinite;
+		}
+			@keyframes gradient { 50% { filter: hue-rotate(180deg) }}
 /*
 	@media screen and (max-width: 400px) {
 		#title { padding-left: 1px; background: none; }
@@ -220,6 +237,7 @@ label { margin: 5px }
 	}
 
 	.user {
+		margin-bottom: 2px;
 		font-size: 16px;
 		font-weight: 300;
 	}
@@ -238,6 +256,7 @@ label { margin: 5px }
 	.playing {
 		display: none;
 		height: 22px;
+		font-size: 15px;
 		line-height: 100%;
 		padding-left: 20px;
 		font-weight: 400;
@@ -245,8 +264,8 @@ label { margin: 5px }
 	}
 
 .sound.selected {
-	border-top: 4px #53565a solid;
-	border-bottom: 4px #53565a solid;
+	border-top: 3px #53565a solid;
+	border-bottom: 3px #53565a solid;
 }
 
 .error { border-color: red }

@@ -18,8 +18,9 @@ else {
 }
 
 async function extClientRegistered() {
-	const response = await fetch('client.php?check');
-	const id = await response.text();
+	const
+		response = await fetch('client.php?check'),
+		id = await response.text();
 	return (id != '0');
 }
 
@@ -60,8 +61,9 @@ function adminSwitch(e = false) {
 }
 
 async function getConfig() {
-	const response = await fetch('setconfig.php?get');
-	const config = await response.json();
+	const
+		response = await fetch('setconfig.php?get'),
+		config = await response.json();
 	configform['no-upload'].checked = config['no-upload'];
 	configform['party-url'].value = config['party-url'];
 }
@@ -89,6 +91,7 @@ async function clientSwitch(clientRegistered = false) {
 		deregisterClient();
 		return outputSwitch();
 	}
+
 	outputmsg.textContent = outputmsg.dataset.clientSwitch;
 	if (!clientRegistered) {
 		const registered = await extClientRegistered();
@@ -102,6 +105,7 @@ async function clientSwitch(clientRegistered = false) {
 			return clientform.password.focus();
 		}
 	}
+
 	document.body.classList.remove('clientregister');
 	sounds = contents.querySelectorAll('.sound');
 	clientWorker = new Worker('client-worker.js');
@@ -188,8 +192,9 @@ function initCompressor() {
 		'attack': 0,
 //		'release': 0.25
 	});
-	const gain = new GainNode(audioContext, { 'gain': 2 });
-	const source = audioContext.createMediaElementSource(localPlay);
+	const
+		gain = new GainNode(audioContext, { 'gain': 2 }),
+		source = audioContext.createMediaElementSource(localPlay);
 	source.connect(compressor).connect(gain).connect(audioContext.destination);
 }
 
@@ -199,7 +204,7 @@ function play(el) {
 	if (!remotePlay || clientWorker) playbackEnded();	// Remove 'Playing...' from current sound
 	playingId = el.id;
 	const
-		file = el.dataset.src;
+		file = el.dataset.src,
 		sound = document.getElementById(playingId),
 		playing = document.getElementById(playingId +'-playing');
 	sound.style.color = '';
@@ -248,7 +253,7 @@ function playbackEnded(event = false) {
 			sound.style.color = 'red';
 		playingId = false;
 	}
-	if (clientWorker && queue.length) clientPlayNext();
+	if (localPlay.ended && clientWorker && queue.length) clientPlayNext();
 };
 
 function removeForm(el) {
