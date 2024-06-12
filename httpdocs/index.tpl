@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='-.1em' y='.9em' font-size='85'>📢</text></svg>">
+	<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='-.1em' y='.9em' font-size='85'>📢</text></svg>">
 	<link rel="stylesheet" type="text/css" href="soundboard.css">
 	<meta charset="UTF-8">
 	<meta name="referrer" content="same-origin">

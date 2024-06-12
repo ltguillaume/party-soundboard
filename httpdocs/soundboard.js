@@ -162,6 +162,7 @@ function deregisterClient(e = false) {
 
 async function recordSwitch() {
 	if (recpanel.classList.contains('shown')) {
+		stopRecorder();
 		recpanel.classList.remove('shown');
 		contents.classList.remove('disabled');
 	} else {
@@ -171,6 +172,12 @@ async function recordSwitch() {
 		recpanel.classList.add('shown');
 		contents.classList.add('disabled');
 	}
+}
+
+function stopRecorder() {
+	if (!stream) return;
+	stream.getTracks().forEach((track) => { track.stop() });
+	mediaRecorder = stream = false;
 }
 
 async function refresh() {
@@ -329,9 +336,7 @@ function validate() {
 }
 
 // https://dobrian.github.io/cmp/topics/sample-recording-and-playback-with-web-audio-api/3.microphone-input-and-recording.html
-let
-	mediaRecorder = false,
-	stream = false;
+let mediaRecorder = stream = false;
 
 async function recStartStop() {
 	let isRecording = mediaRecorder && mediaRecorder.state == 'recording';
@@ -373,8 +378,7 @@ async function tryInBrowserRecording() {
 			mediaRecorder.ondataavailable = (e) => { chunks.push(e.data) };
 			mediaRecorder.onstart = (e) => { recordbtn.startTime = e.timeStamp };
 			mediaRecorder.onstop = () => {
-				stream.getTracks().forEach((track) => { track.stop() });
-				stream = null;
+				stopRecorder();
 				const
 					fileType = chunks[0].type,
 					blob = new Blob(chunks, { 'type': fileType }),
