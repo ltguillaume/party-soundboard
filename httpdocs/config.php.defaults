@@ -1,7 +1,7 @@
 <?php
 
-$NOUPLOAD = 0;	// Prevent users from recording new soundbites
-$PARTYURL = '';	// Like https://festify.us/party/...
-$PASSWORD = 'party time excellent';	// To enter admin or client mode
+$NOUPLOAD = "";	// Prevent users from recording new soundbites (0, false or "" will allow uploads)
+$PARTYURL = "";	// Like https://festify.us/party/...
+$PASSWORD = "party time excellent";	// To enter admin or client mode
 
 ?>
