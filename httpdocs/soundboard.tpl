@@ -11,7 +11,7 @@
 	<input type="password" name="password" placeholder="{password}...">
 	<input type="submit" value="{send}" onclick="setConfig(event)">
 </form>
-<div id="contents" data-playing="{playing}" data-password="{password}" data-remove="{remove}" data-error-refresh="{error-refresh}">
+<div id="contents" data-play-request="{play-request}" data-playing="{playing}" data-password="{password}" data-remove="{remove}" data-error-refresh="{error-refresh}">
 	{contents}
 </div>
 <div id="bottomnav" class="bottomnav">

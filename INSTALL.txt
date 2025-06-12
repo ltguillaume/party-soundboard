@@ -1,11 +1,11 @@
-1. Upload this folder to your server
+1. Upload the files from the httpdocs folder to your server
 
-2. Make sure the following file and folders can be written to by the web server:
-   ./client.cue
-   ./client.id
-   ./config.php
-   ./sounds/
-   ./uploads/
+2. Make sure the following files and folders can be written to by the web server:
+   client.cue
+   client.id
+   config.php
+   sounds/
+   uploads/
 
 3. Copy config.php.defaults to config.php. Then edit the values inside:
    - Set "NOUPLOAD" to true if you don't want users to be able to record new soundbites.

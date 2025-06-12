@@ -11,6 +11,9 @@ _Soundboard is a simple mobile web-based soundboard system with the ability to r
 - The soundboard includes a remote playback client mode to receive playback commands from other users
 - Landing page to link to an online playlist, such as [Festify](https://getfestify.com)
 
+#### Installation
+See [INSTALL.txt](INSTALL.txt) for instructions.
+
 #### Dependencies
 - For [Festify](https://getfestify.com), you'll need a [Spotify Premium](https://spotify.com) account.
 

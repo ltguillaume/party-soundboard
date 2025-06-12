@@ -216,7 +216,7 @@ function play(el) {
 		playing = document.getElementById(playingId +'-playing');
 	sound.style.color = '';
 	sound.classList.add('selected');
-	playing.innerHTML = contents.dataset.playing +'...';
+	playing.innerHTML = (remotePlay ? contents.dataset.playRequest : contents.dataset.playing) +'...';
 	playing.style.display = 'block';
 	if (!clientWorker && remotePlay)
 		playRemotely(file);
