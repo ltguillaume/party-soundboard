@@ -1,5 +1,5 @@
 # Soundboard
-by ltGuillaume: [Codeberg](https://codeberg.org/ltGuillaume) | [GitHub](https://github.com/ltGuillaume) | [Buy me a beer](https://buymeacoff.ee/ltGuillaume) 🍺
+by ltGuillaume: [Codeberg](https://codeberg.org/ltguillaume) | [GitHub](https://github.com/ltguillaume) | [Buy me a beer](https://coff.ee/ltguillaume) 🍺
 
 _Soundboard is a simple mobile web-based soundboard system with the ability to record your own sounds and play them on a remote (party) computer._
 

@@ -35,6 +35,7 @@ form {
 	margin: 0 auto;
 }
 	#configform { text-align: center }
+		#configform input[name=password]::placeholder { color: tan }
 	.wideform { padding-bottom: 20px }
 	.wideform button, .wideform input:not([type=checkbox]) { width: 100% }
 
