@@ -54,6 +54,7 @@ function adminSwitch(e = false) {
 		configform.classList.add('hidden');
 	} else if (confirm(adminbtn.dataset.adminPrompt)) {
 		adminMode = true;
+		scrollTo(0,0);
 		title.textContent = title.dataset.adminTitle +'🛡';
 		configform.classList.remove('hidden');
 		getConfig();
